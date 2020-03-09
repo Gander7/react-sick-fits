@@ -1,17 +1,24 @@
-import React from 'react'
 import Link from 'next/link'
+import NavStyles from './styles/NavStyles'
 
 const Nav = () => {
+  const links = [ 
+    { label: 'Items', target: 'items' },
+    { label: 'Sell', target: 'sell' },
+    { label: 'Signup', target: 'signup' },
+    { label: 'Orders', target: 'orders' },
+    { label: 'Account', target: 'me' }
+  ]
+
   return (
-    <div>
-      <Link href="/sell">
-        <a>Sell!</a>
-      </Link>
-      <Link href="/">
-        <a>Home!</a>
-      </Link>
-    </div>
-  );
-};
+    <NavStyles>
+      {links.map(link => (
+        <Link key={link.label} href={`/${link.target}`}>
+          <a>{link.label}</a>
+        </Link>
+      ))}
+    </NavStyles>
+  )
+}
 
 export default Nav;
