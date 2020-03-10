@@ -3,7 +3,7 @@ import NavStyles from './styles/NavStyles'
 
 const Nav = () => {
   const links = [ 
-    { label: 'Items', target: 'items' },
+    { label: 'Shop', target: 'items' },
     { label: 'Sell', target: 'sell' },
     { label: 'Signup', target: 'signup' },
     { label: 'Orders', target: 'orders' },
