@@ -1,24 +1,47 @@
 import Link from 'next/link'
 import NavStyles from './styles/NavStyles'
+import User from './User'
+import Signout from './Signout'
 
 const Nav = () => {
-  const links = [ 
-    { label: 'Shop', target: 'items' },
-    { label: 'Sell', target: 'sell' },
-    { label: 'Signup', target: 'signup' },
-    { label: 'Orders', target: 'orders' },
-    { label: 'Account', target: 'me' }
+  const links = [
+    { label: 'Shop', target: 'items', requiresAuth: false },
+    { label: 'Sell', target: 'sell', requiresAuth: true },
+    { label: 'Sign in', target: 'signup', requiresAuth: false },
+    { label: 'Orders', target: 'orders', requiresAuth: true },
+    { label: 'Account', target: 'me', requiresAuth: true },
   ]
 
   return (
-    <NavStyles>
-      {links.map(link => (
-        <Link key={link.label} href={`/${link.target}`}>
-          <a>{link.label}</a>
-        </Link>
-      ))}
-    </NavStyles>
+    <User>
+      {({ data: { me } }) => (
+        <NavStyles>
+          <Link href="/items">
+            <a>Shop</a>
+          </Link>
+          {me && (
+            <>
+              <Link href="/sell">
+                <a>Sell</a>
+              </Link>
+              <Link href="/orders">
+                <a>Orders</a>
+              </Link>
+              <Link href="/me">
+                <a>Account</a>
+              </Link>
+              <Signout />
+            </>
+          )}
+          {!me && (
+            <Link href="/signup">
+              <a>Sign In</a>
+            </Link>
+          )}
+        </NavStyles>
+      )}
+    </User>
   )
 }
 
-export default Nav;
+export default Nav
