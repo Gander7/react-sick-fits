@@ -40,6 +40,7 @@ export default class Signin extends Component {
               onSubmit={(e) => {
                 e.preventDefault()
                 signin()
+                this.setState({ email: '', password: '' })
               }}
             >
               <fieldset disabled={loading} aria-busy={loading}>
