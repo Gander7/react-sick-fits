@@ -206,9 +206,7 @@ const Mutations = {
     )
   },
 
-  // FIXME: Not updating quantity
   async addToCart(parent, args, ctx, info) {
-    console.log('HEREERERERE')
     // Check sign in
     const userId = ctx.request.userId
     if (!userId) throw new Error('You must be signed in.')
@@ -243,6 +241,27 @@ const Mutations = {
       },
       info,
     )
+  },
+
+  async removeFromCart(parent, args, ctx, info) {
+    // Find Cart
+    const cartItem = await ctx.db.query.cartItem(
+      {
+        where: {
+          id: args.id,
+        },
+      },
+      ` { id, user { id }}`,
+    )
+    // item found
+    if (!cartItem) throw new Error('Item not found.')
+    // Make sure they own the cart item
+    if (cartItem.user.id !== ctx.request.userId) throw new Error('Item cannot be deleted.')
+    // Delete cart item
+    return ctx.db.mutation.deleteCartItem({
+      where: { id: args.id },
+      info,
+    })
   },
 }
 

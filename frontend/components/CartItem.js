@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import formatMoney from '../lib/formatMoney'
+import RemoveFromCart from './RemoveFromCart'
 
 const CartItemStyles = styled.li`
   padding: 1rem 0;
@@ -18,21 +19,25 @@ const CartItemStyles = styled.li`
   }
 `
 
-const CartItem = ({ item }) => (
-  <CartItemStyles>
-    <img width="100" src={item.item.image} alt="" />
-    <div className="cart-item-details">
-      <h3>{item.item.title}</h3>
-      <p>
-        {formatMoney(item.item.price * item.quantity)}
-        {' - '}
-        <em>
-          {item.quantity} &times; {formatMoney(item.item.price)} each
-        </em>
-      </p>
-    </div>
-  </CartItemStyles>
-)
+const CartItem = ({ item }) => {
+  console.log(item.id)
+  return (
+    <CartItemStyles>
+      <img width="100" src={item.item.image} alt="" />
+      <div className="cart-item-details">
+        <h3>{item.item.title}</h3>
+        <p>
+          {formatMoney(item.item.price * item.quantity)}
+          {' - '}
+          <em>
+            {item.quantity} &times; {formatMoney(item.item.price)} each
+          </em>
+        </p>
+      </div>
+      <RemoveFromCart id={item.id} />
+    </CartItemStyles>
+  )
+}
 
 CartItem.propTypes = {
   item: PropTypes.object.isRequired,
