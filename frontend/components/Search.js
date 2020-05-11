@@ -1,5 +1,5 @@
 import React from 'react'
-import Downshift from 'downshift'
+import Downshift, { resetIdCounter } from 'downshift'
 import Router from 'next/router'
 import { ApolloConsumer } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -16,6 +16,15 @@ const SEARCH_ITEMS_QUERY = gql`
     }
   }
 `
+
+const routeToItem = (item) => {
+  Router.push({
+    pathname: '/item',
+    query: {
+      id: item.id,
+    },
+  })
+}
 
 class Autocomplete extends React.Component {
   state = {
@@ -34,9 +43,13 @@ class Autocomplete extends React.Component {
   }, 400)
 
   render() {
+    resetIdCounter()
     return (
       <SearchStyles>
-        <Downshift>
+        <Downshift
+          itemToString={(item) => (item === null ? '' : item.title)}
+          onChange={routeToItem}
+        >
           {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
             <div>
               <ApolloConsumer>
@@ -57,14 +70,21 @@ class Autocomplete extends React.Component {
               </ApolloConsumer>
               {isOpen && (
                 <DropDown>
-                  {this.state.items.map((item) => {
+                  {this.state.items.map((item, ix) => {
                     return (
-                      <DropDownItem key={item.id}>
+                      <DropDownItem
+                        {...getItemProps({ item })}
+                        key={item.id}
+                        highlighted={ix === highlightedIndex}
+                      >
                         <img width="50" src={item.image} alt={item.title} />
                         {item.title}
                       </DropDownItem>
                     )
                   })}
+                  {!this.state.items.length && !this.state.loading && (
+                    <DropDownItem>Nothing Found for {inputValue}</DropDownItem>
+                  )}
                 </DropDown>
               )}
             </div>
