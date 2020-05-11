@@ -24,10 +24,28 @@ const BigButton = styled.button`
 `
 
 const RemoveFromCart = ({ id }) => {
+  const update = (cache, payload) => {
+    // read cache
+    const data = cache.readQuery({ query: CURRENT_USER_QUERY })
+    // remove item
+    const cartItemId = payload.data.removeFromCart.id
+    data.me.cart = data.me.cart.filter((item) => item.id !== cartItemId)
+    // write cache
+    cache.writeQuery({ query: CURRENT_USER_QUERY, data })
+  }
+
   return (
     <Mutation
       mutation={REMOVE_FROM_CART_MUTATION}
       variables={{ id }}
+      update={update}
+      optimisticResponse={{
+        __typename: 'Mutation',
+        removeFromCart: {
+          __typename: 'CartItem',
+          id,
+        },
+      }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
       {(removeFromCart, { loading, error }) => (
