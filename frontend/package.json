@@ -33,9 +33,10 @@
     "react-adopt": "^0.6.0",
     "react-apollo": "^2.5.8",
     "react-dom": "^16.13.1",
+    "react-is": "^16.13.1",
     "react-stripe-checkout": "^2.6.3",
     "react-transition-group": "^2.9.0",
-    "styled-components": "^3.4.10",
+    "styled-components": "^5.1.0",
     "waait": "^1.0.5"
   },
   "devDependencies": {
